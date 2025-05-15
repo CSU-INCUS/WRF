@@ -81,12 +81,34 @@
 !..Declaration of constants for assumed CCN/IN aerosols when none in
 !.. the input data.  Look inside the init routine for modifications
 !.. due to surface land-sea points or vegetation characteristics.
-      REAL, PARAMETER, PRIVATE:: naIN0 = 1.5E6
+
+!!! JB start edit (1/3) for INCUS !!!
+
+!.. set up an idealized initial aerosol profile that matches INCUS RAMS 
+!..
+!.. (1) add scale height (SH) for exponentially deceasing aerosol profile
+!.. CCN: Use SH_CCN = 5000 for continental; 10000 for maritime [m]
+!.. IN:  Use SH_IN  = 5000 for both continental and maritime   [m]
+!..
+!.. (2) set initial values for CCN (naCCN0) and IN (naIN0) 
+!.. naIN0  = 10.0E6 for land; 1.0E6 for ocean     [#/kg]
+!.. naCCN0 = 2500.0E6 for land; 500.0E6 for ocean [#/kg]
+!.. units for naIN0 and naCCN0 have been changed here to [#/kg] to match RAMS
+!.. will multiply by air density later in init_aerosol routine to convert back to [#/m^3]
+!.. 
+!.. remember to recompile after changing these values!! 
+
+      REAL, PARAMETER, PRIVATE:: naIN0 = 10.0E6 !10 for land; 1 for ocean [#/kg] !! CHANGE ME !!
       REAL, PARAMETER, PRIVATE:: naIN1 = 0.5E6
-      REAL, PARAMETER, PRIVATE:: naCCN0 = 300.0E6
+      REAL, PARAMETER, PRIVATE:: naCCN0 = 2500.0E6 !2500 for land; 500 for ocean [#/kg] !! CHANGE ME !!
       REAL, PARAMETER, PRIVATE:: naCCN1 = 50.0E6
       REAL, PARAMETER, PRIVATE:: naBC0 = 150.0E6
       REAL, PARAMETER, PRIVATE:: naBC1 = 25.0E6
+
+      REAL, PARAMETER, PRIVATE:: SH_CCN = 10000 ! CCN scale height [m] !! CHANGE ME !!
+      REAL, PARAMETER, PRIVATE:: SH_IN = 5000   ! IN scale height  [m] !! DO NOT CHANGE !!
+
+!!! JB end edit (1/3) for INCUS !!!
 
 !..Generalized gamma distributions for rain, graupel and cloud ice.
 !.. N(D) = N_0 * D**mu * exp(-lamda*D);  mu=0 is exponential.
@@ -459,22 +481,38 @@
          CALL wrf_debug(100, mp_debug)
          do j = jts, min(jde-1,jte)
          do i = its, min(ide-1,ite)
-            if (hgt(i,1,j).le.1000.0) then
-               h_01 = 0.8
-            elseif (hgt(i,1,j).ge.2500.0) then
-               h_01 = 0.01
-            else
-               h_01 = 0.8*cos(hgt(i,1,j)*0.001 - 1.0)
-            endif
-            niCCN3 = -1.0*ALOG(naCCN1/naCCN0)/h_01
-            nwfa(i,1,j) = naCCN1+naCCN0*exp(-((hgt(i,2,j)-hgt(i,1,j))/1000.)*niCCN3)
-            z1=hgt(i,2,j)-hgt(i,1,j)
-            nwfa2d(i,j) = nwfa(i,1,j) * 0.000196 * (50./z1)
-            do k = 2, kte
-               nwfa(i,k,j) = naCCN1+naCCN0*exp(-((hgt(i,k,j)-hgt(i,1,j))/1000.)*niCCN3)
+
+!!! JB start edit (2/3) for INCUS !!!
+!.. create the idealized exponentially decreasing CCN profile 
+!.. no emission sources for INCUS - turn off emissions 
+
+           ! (i,j) = nwfa(i,1,j) * 0.000196 * (50./z1) ! JB off "pseudo" surface emissions
+            nwfa2d(i,j) = 0 ! JB turned off "pseudo" surface emissions
+            do k = 1, kte
+               nwfa(i,k,j) = 1/orho(i,k,j)*naCCN0*exp(-hgt(i,k,j)/SH_CCN) ! units = [#/m^3]
             enddo
          enddo
          enddo
+
+            !if (hgt(i,1,j).le.1000.0) then
+            !   h_01 = 0.8
+            !elseif (hgt(i,1,j).ge.2500.0) then
+            !   h_01 = 0.01
+            !else
+            !   h_01 = 0.8*cos(hgt(i,1,j)*0.001 - 1.0)
+            !endif
+            !niCCN3 = -1.0*ALOG(naCCN1/naCCN0)/h_01
+            !nwfa(i,1,j) = naCCN1+naCCN0*exp(-((hgt(i,2,j)-hgt(i,1,j))/1000.)*niCCN3)
+            !z1=hgt(i,2,j)-hgt(i,1,j)
+            !nwfa2d(i,j) = nwfa(i,1,j) * 0.000196 * (50./z1)
+            !do k = 2, kte
+            !   nwfa(i,k,j) = naCCN1+naCCN0*exp(-((hgt(i,k,j)-hgt(i,1,j))/1000.)*niCCN3)
+            !enddo
+         !enddo
+         !enddo
+
+!!! JB end edit (2/3) for INCUS !!!
+
       else
          has_CCN    = .TRUE.
          write(mp_debug,*) ' Apparently initial CCN aerosols are present.'
@@ -497,20 +535,33 @@
          CALL wrf_debug(100, mp_debug)
          do j = jts, min(jde-1,jte)
          do i = its, min(ide-1,ite)
-            if (hgt(i,1,j).le.1000.0) then
-               h_01 = 0.8
-            elseif (hgt(i,1,j).ge.2500.0) then
-               h_01 = 0.01
-            else
-               h_01 = 0.8*cos(hgt(i,1,j)*0.001 - 1.0)
-            endif
-            niIN3 = -1.0*ALOG(naIN1/naIN0)/h_01
-            nifa(i,1,j) = naIN1+naIN0*exp(-((hgt(i,2,j)-hgt(i,1,j))/1000.)*niIN3)
-            do k = 2, kte
-               nifa(i,k,j) = naIN1+naIN0*exp(-((hgt(i,k,j)-hgt(i,1,j))/1000.)*niIN3)
+
+!!! JB start edit (3/3) for INCUS !!!
+!.. create the idealized exponentially decreasing IN profile 
+
+         do k = 1, kte
+               nifa(i,k,j) = 1/orho(i,k,j)*naIN0*exp(-hgt(i,k,j)/SH_IN) ! units = [#/m^3]
             enddo
          enddo
          enddo
+
+            !if (hgt(i,1,j).le.1000.0) then
+            !   h_01 = 0.8
+            !elseif (hgt(i,1,j).ge.2500.0) then
+            !   h_01 = 0.01
+            !else
+            !   h_01 = 0.8*cos(hgt(i,1,j)*0.001 - 1.0)
+            !endif
+            !niIN3 = -1.0*ALOG(naIN1/naIN0)/h_01
+            !nifa(i,1,j) = naIN1+naIN0*exp(-((hgt(i,2,j)-hgt(i,1,j))/1000.)*niIN3)
+            !do k = 2, kte
+            !   nifa(i,k,j) = naIN1+naIN0*exp(-((hgt(i,k,j)-hgt(i,1,j))/1000.)*niIN3)
+            !enddo
+         !enddo
+         !enddo
+
+!!! JB end edit (3/3) for INCUS !!!
+
       else
          has_IN     = .TRUE.
          write(mp_debug,*) ' Apparently initial IN aerosols are present.'
