@@ -1,0 +1,35 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 3,
+ start_date = '2006-01-23_03:00:00','2006-01-23_03:00:00','2006-01-23_09:00:00','2016-12-30_00:00:00',
+ end_date   = '2006-01-23_17:00:00','2006-01-23_17:00:00','2006-01-23_13:00:00','2016-12-30_00:00:00',
+ interval_seconds = 3600
+/
+
+&geogrid
+ parent_id         =   0,   1,     2, 
+ parent_grid_ratio =   1,   4,    4,
+ i_parent_start    =   1,  405,  285,
+ j_parent_start    =   1,  130,  280,
+ e_we              =  1040, 1249,2501,
+ e_sn              =  625, 1197, 2201,
+ geog_data_res = 'default','default','default',
+ dx = 1600,
+ dy = 1600,
+ map_proj = 'mercator',
+ ref_lat   =  -11.5,
+ ref_lon   =  130.2,
+ truelat1  = -26.00,
+ truelat2  = -36.00,
+ stand_lon = -64.00,
+ geog_data_path = '/nobackup/isingh2/WPS_GEOG/'
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+/
