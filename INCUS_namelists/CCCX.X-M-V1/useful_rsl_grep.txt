@@ -1,0 +1,13 @@
+
+
+grep -i FATAL rsl.*
+
+grep -i error rsl.*
+
+grep -i SIGSEGV rsl.*
+
+grep -i cfl rsl.*
+
+
+!!!!!! compile WRF in debug mode !!!!!!
+./configure -d 
