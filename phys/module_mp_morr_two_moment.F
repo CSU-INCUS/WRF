@@ -273,6 +273,12 @@ SUBROUTINE MORR_TWO_MOMENT_INIT(morr_rimed_ice) ! RAS
 ! SET CONSTANT DROPLET CONCENTRATION (UNITS OF CM-3)
 ! IF NO COUPLING WITH WRF-CHEM
 
+!!! JB note for INCUS          !!!
+!   Use NDCNST = 250 for Land    !
+!   Use NDCNST = 100 for Ocean   !
+!   Recompile after changing!    !
+!!! End JB note for INCUS      !!!
+
       NDCNST = 250.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
