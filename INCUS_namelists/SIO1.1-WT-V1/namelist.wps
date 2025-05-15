@@ -1,0 +1,36 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 3,
+ start_date = '2011-11-23_12:00:00','2011-11-23_16:00:00','2011-11-23_22:00:00','2016-12-30_00:00:00',
+ end_date   = '2011-11-24_20:00:00','2011-11-24_08:00:00','2011-11-24_05:00:00','2016-12-30_00:00:00',
+ interval_seconds = 3600
+ active_grid = false, false, true
+/
+
+&geogrid
+ parent_id         =   0,   1,    2, 
+ parent_grid_ratio =   1,   4,    4,
+ i_parent_start    =   1,  405,  270,
+ j_parent_start    =   1,  395,  235,
+ e_we              =  1300,1201, 2901,
+ e_sn              =  925 ,997,  2301,
+ geog_data_res = 'default','default','default',
+ dx = 1600,
+ dy = 1600,
+ map_proj = 'mercator',
+ ref_lat   =    0.3,
+ ref_lon   =  80.33,
+ truelat1  =    0.3,
+ truelat2  =  36.00,
+ stand_lon =  80.33,
+ geog_data_path = '/nobackup/jbukowsk/WRF_Test_09Nov23/WPS-4.4-Serial/WPS_GEOG/'
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+/

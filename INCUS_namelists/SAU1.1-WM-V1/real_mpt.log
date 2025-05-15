@@ -1,0 +1,31 @@
+Job 21439882.pbspl1.nas.nasa.gov started on Mon Jan 20 14:01:36 PST 2025
+The job requested the following resources:
+    ncpus=140
+    place=scatter:excl
+    walltime=02:00:00
+
+PBS set the following environment variables:
+        FORT_BUFFERED = 1
+                   TZ = PST8PDT
+
+On r631i7n7:
+Warning: no access to tty (Inappropriate ioctl for device).
+Thus no job control in this shell.
+Current directory is /nobackup/jbukowsk/WRF_RUNS/SAU1.1-WM-V1
+
+____________________________________________________________________
+Job Resource Usage Summary for 21439882.pbspl1.nas.nasa.gov
+
+    CPU Time Used            : 03:01:21
+    Real Memory Used         : 31969996kb
+    Walltime Used            : 00:06:35
+    Exit Status              : 0
+
+    Number of CPUs Requested : 140
+    Walltime Requested       : 02:00:00
+
+    Execution Queue          : devel
+    Charged To               : s2841
+
+    Job Stopped              : Mon Jan 20 14:08:25 2025
+____________________________________________________________________
