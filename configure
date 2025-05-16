@@ -1057,24 +1057,31 @@ if [ -n "$NETCDF4" ] ; then
       rm -f tools/nc4_test.log
     fi
     if [ $retval -ne 0  ] ; then
-      echo "************************** W A R N I N G ************************************"
-      echo "NETCDF4 IO features are requested, but this installation of NetCDF           "
-      echo "  $NETCDF"
-      echo "DOES NOT support these IO features.                                          "
-      echo
-      echo "Please make sure NETCDF version is 4.1.3 or later and was built with         "
-      echo "--enable-netcdf4                                                             "
-      echo
-      echo "OR set NETCDF_classic variable                                               "
-      echo "   bash/ksh : export NETCDF_classic=1                                        "
-      echo "        csh : setenv NETCDF_classic 1                                        "
-      echo 
-      echo "Then re-run this configure script                                            "
-      echo
-      echo "!!! configure.wrf has been REMOVED !!!"
-      echo
-      echo "*****************************************************************************"
-      rm -f configure.wrf
+
+      # Start JB removed warning for INCUS WRF
+      # Configure with PNETCDF4 is fine, but tests will fail with NASA HPC system
+
+      #echo "************************** W A R N I N G ************************************"
+      #echo "NETCDF4 IO features are requested, but this installation of NetCDF           "
+      #echo "  $NETCDF"
+      #echo "DOES NOT support these IO features.                                          "
+      #echo
+      #echo "Please make sure NETCDF version is 4.1.3 or later and was built with         "
+      #echo "--enable-netcdf4                                                             "
+      #echo
+      #echo "OR set NETCDF_classic variable                                               "
+      #echo "   bash/ksh : export NETCDF_classic=1                                        "
+      #echo "        csh : setenv NETCDF_classic 1                                        "
+      #echo 
+      #echo "Then re-run this configure script                                            "
+      #echo
+      #echo "!!! configure.wrf has been REMOVED !!!"
+      #echo
+      #echo "*****************************************************************************"
+      #rm -f configure.wrf
+
+      # End JB remove warning for INCUS WRF
+
     else
       echo "*****************************************************************************"
       echo "This build of WRF will use NETCDF4 with HDF5 compression"
