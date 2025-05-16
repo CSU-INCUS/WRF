@@ -1,0 +1,9 @@
+
+! Modules for running WPS !
+
+module load comp-intel/2020.4.304 
+module load mpi-hpe/mpt.2.28_25Apr23_rhel87
+module load szip/2.1.1 
+module load hdf4/4.2.12 
+module load hdf5/1.8.18_mpt 
+module load netcdf/4.4.1.1_mpt 
