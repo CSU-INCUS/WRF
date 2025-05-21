@@ -1,0 +1,36 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 3,
+ start_date = '2019-09-10_00:00:00','2019-09-10_10:00:00','2019-09-10_13:00:00','2018-12-12_00:00:00',
+ end_date   = '2019-09-10_19:00:00','2019-09-10_18:00:00','2019-09-10_17:00:00','2018-12-12_00:00:00',
+ interval_seconds = 3600
+ active_grid = false, false, true
+/
+
+&geogrid
+ parent_id         =   0,   1,     2, 
+ parent_grid_ratio =   1,   4,     4,
+ i_parent_start    =   1,  155,  390,
+ j_parent_start    =   1,  80,  135,
+ e_we              =  670, 1249, 2697,
+ e_sn              =  500, 949,  2717,
+ geog_data_res = 'default','default','default',
+ dx = 1600,
+ dy = 1600,
+ map_proj = 'mercator',
+ ref_lat   =  16.50,
+ ref_lon   = 129.60,
+ truelat1  =  16.50,
+ truelat2  = -36.00,
+ stand_lon = 129.60,
+ geog_data_path = '/nobackup/isingh2/WPS_GEOG/'
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+/
